@@ -17,7 +17,7 @@ object Hocon2Class {
         map.asScala.map(loop).toList
       case e => e
     }
-    loop(config.root().unwrapped()).asInstanceOf[Map[String, Any]]
+    loop(config.root().unwrapped).asInstanceOf[Map[String, Any]]
   }
 
   def gimmeConfig(
