@@ -4,7 +4,6 @@ import scala.util.control.NonFatal
 
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
-import com.typesafe.config.ConfigResolveOptions
 
 object Hocon2Class {
   private def config2map(config: Config): Map[String, Any] = {
@@ -28,7 +27,7 @@ object Hocon2Class {
       val config = ConfigFactory.parseString(str)
       val extracted = path match {
         case Some(p) =>
-          config.getConfig(p).resolve(ConfigResolveOptions.noSystem)
+          config.getConfig(p)
         case _ => config
       }
       Right(config2map(extracted))
