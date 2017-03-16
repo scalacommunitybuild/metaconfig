@@ -58,9 +58,11 @@ lazy val `metaconfig-core` = project
   .settings(
     metaMacroSettings
   )
+  .enablePlugins(ScalaNativePlugin)
 
 lazy val `metaconfig-hocon` = project
   .settings(
-    libraryDependencies += "com.typesafe" % "config" % "1.3.1"
+    libraryDependencies += "eu.unicredit" % "shocon" % "1.1.7-native"
   )
   .dependsOn(`metaconfig-core`)
+  .enablePlugins(ScalaNativePlugin)
