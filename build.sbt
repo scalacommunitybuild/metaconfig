@@ -4,7 +4,7 @@ lazy val ParadiseVersion = "3.0.0-M7"
 inThisBuild(
   Seq(
     organization := "com.geirsson",
-    version := "0.1.2",
+    version := "0.1.2-native",
     // Only needed when using bintray snapshot versions
 //    resolvers += Resolver.bintrayIvyRepo("scalameta", "maven"),
     scalaVersion := ScalaVersions.head,
@@ -62,7 +62,7 @@ lazy val `metaconfig-core` = project
 
 lazy val `metaconfig-hocon` = project
   .settings(
-    libraryDependencies += "eu.unicredit" % "shocon" % "1.1.7-native"
+    libraryDependencies += "eu.unicredit" %%% "shocon" % "0.1.7-native"
   )
   .dependsOn(`metaconfig-core`)
   .enablePlugins(ScalaNativePlugin)
