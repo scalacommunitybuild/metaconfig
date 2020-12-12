@@ -7,7 +7,7 @@ import ujson._
 import upickle.core.{Visitor, ObjArrVisitor}
 
 final class JsonConfParser[J](input: Input)
-    extends SyncParser[J]
+    extends Parser[J]
     with CharBasedParser[J] {
   var line = 0
   val chars = input.chars
@@ -22,12 +22,12 @@ final class JsonConfParser[J](input: Input)
     }
   }
 
-  private def trailingComma(i: Int): Int = at(i) match {
+  private def trailingComma(i: Int): Int = char(i) match {
     case ',' =>
       var curr = i + 1
       var done = false
       while (!atEof(curr) && !done) {
-        at(curr) match {
+        char(curr) match {
           case '/' =>
             curr = comment(curr) + 1
           case ' ' | '\n' =>
@@ -36,7 +36,7 @@ final class JsonConfParser[J](input: Input)
             done = true
         }
       }
-      at(curr) match {
+      char(curr) match {
         case ']' | '}' =>
           curr
         case _ =>
@@ -45,12 +45,12 @@ final class JsonConfParser[J](input: Input)
     case _ => i
   }
 
-  private def comment(i: Int): Int = at(i) match {
+  private def comment(i: Int): Int = char(i) match {
     case '/' =>
-      at(i + 1) match {
+      char(i + 1) match {
         case '/' =>
           var curr = i + 2
-          while (!atEof(curr) && at(curr) != '\n') {
+          while (!atEof(curr) && char(curr) != '\n') {
             curr += 1
           }
           curr
@@ -67,7 +67,7 @@ final class JsonConfParser[J](input: Input)
     if (atEof(i)) {
       i
     } else {
-      val next = at(i) match {
+      val next = char(i) match {
         case '/' => comment(i)
         case ',' => trailingComma(i)
         case _ => i
@@ -85,14 +85,16 @@ final class JsonConfParser[J](input: Input)
   ): Unit =
     ()
 
-  def at(i: Int): Char = {
+  def char(i: Int): Char = {
     if (i >= chars.length)
       throw new StringIndexOutOfBoundsException(i)
     chars(i)
   }
-  def at(i: Int, j: Int): CharSequence = wrapped.subSequence(i, j)
+  def sliceString(i: Int, j: Int): CharSequence = wrapped.subSequence(i, j)
   def atEof(i: Int): Boolean = i >= chars.length
   def close(): Unit = ()
+  def dropBufferUntil(i: Int): Unit = ()
+
 }
 
 object JsonConfParser extends Transformer[Input] {
